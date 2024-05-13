@@ -1,0 +1,351 @@
+<app-admin-header></app-admin-header>
+<div class="container">
+  <div class="row">
+    <div class="d-flex justify-content-between my-5">
+      <h2>Mange Article</h2>
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#AddArticleModal"
+        (click)="InitAddFields()"
+      >
+        Add New Article
+      </button>
+    </div>
+
+    <div class="table-responsive overflow-x-auto">
+      <table datatable class="table table-hover table-striped">
+        <thead class="">
+          <th>Title</th>
+          <th>Image</th>
+          <th>Creation Date</th>
+          <th>Publication Date</th>
+          <th>Author Name</th>
+          <th></th>
+          <th></th>
+        </thead>
+
+        <tbody>
+          @for (article of articlesList | paginate : { itemsPerPage: pageSize,
+          currentPage: pageNumber, totalItems: articlesList.length }; track
+          article.id) {
+
+          <tr>
+            <td>{{ article.title }}</td>
+            <td>
+              <img
+                class="rounded-2"
+                width="50px"
+                height="50px"
+                src="data:image/png;base64,{{ article.image }}"
+              />
+            </td>
+            <td>{{ article.creationDate }}</td>
+            <td>{{ article.publicationDate }}</td>
+            <td>{{ articlesAuthors[article.authorId].name }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#EditArticleModal"
+                (click)="InitEditFields(article.id)"
+              >
+                Edit
+              </button>
+            </td>
+            <td>
+              <button
+                class="btn btn-danger"
+                (click)="deleteArticle(article.id)"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          }
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls
+      (pageChange)="handlePageChange($event)"
+    ></pagination-controls>
+  </div>
+</div>
+<app-footer></app-footer>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="AddArticleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="AddNewArticleModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddNewArticleModalTitle">
+          Add New Article
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form (ngSubmit)="addArticle(addForm)" [formGroup]="addForm">
+            <label for="title">Title</label>
+            <input
+              placeholder="Title"
+              formControlName="title"
+              class="form-control mb-3"
+              type="text"
+              id="title"
+            />
+            <div
+              *ngIf="
+                addForm.get('title')?.errors && addForm.get('title')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p *ngIf="addForm.get('title')?.getError('required')" class="m-0">
+                Title is required.
+              </p>
+            </div>
+            <label for="publicationDate">Publication Date</label>
+            <input
+              placeholder="Publication Date"
+              formControlName="publicationDate"
+              class="form-control mb-2"
+              type="date"
+              id="publicationDate"
+            />
+            <div
+              *ngIf="
+                addForm.get('publicationDate')?.errors &&
+                addForm.get('publicationDate')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p
+                *ngIf="addForm.get('publicationDate')?.getError('required')"
+                class="m-0"
+              >
+                Publication date is required.
+              </p>
+            </div>
+
+            <label for="image">Image</label>
+            <input
+              formControlName="image"
+              class="form-control mb-2"
+              type="file"
+              id="image"
+              (change)="uploadImage($event)"
+            />
+            <div
+              *ngIf="
+                addForm.get('image')?.errors && addForm.get('image')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p *ngIf="addForm.get('image')?.getError('required')" class="m-0">
+                Image is required.
+              </p>
+            </div>
+
+            <img
+              [src]="imagePreviewSrc"
+              class="w-100 img-fluid"
+              style="max-height: 196px; object-fit: cover"
+            />
+
+            <label for="authorId">Author Name</label>
+            <select
+              formControlName="authorId"
+              class="form-select mb-2"
+              id="authorId"
+            >
+              @for(author of authorsList; track author.id) {
+              <option value="{{ author.id }}">{{ author.name }}</option>
+              }
+            </select>
+
+            <label for="content">Content</label>
+            <quill-editor id="content" formControlName="content"></quill-editor>
+
+            <button
+              data-bs-dismiss="modal"
+              [disabled]="addForm.invalid"
+              class="btn btn-primary my-4 w-100"
+              type="submit"
+            >
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var AddArticleModal = document.getElementById("AddArticleModal");
+
+  AddArticleModal.addEventListener("show.bs.modal", function (event) {
+    // Button that triggered the modal
+    let button = event.relatedTarget;
+    // Extract info from data-bs-* attributes
+    let recipient = button.getAttribute("data-bs-whatever");
+
+    // Use above variables to manipulate the DOM
+  });
+</script>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="EditArticleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="EditArticleModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditArticleModalTitle">Edit Article</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form (ngSubmit)="editArticle(editForm)" [formGroup]="editForm">
+            <input
+              hidden
+              placeholder="Id"
+              formControlName="id"
+              class="form-control my-3"
+              type="text"
+              id="id"
+            />
+
+            <label for="title">Title</label>
+            <input
+              placeholder="Title"
+              formControlName="title"
+              class="form-control mb-3"
+              type="text"
+              id="title"
+            />
+            <div
+              *ngIf="
+                addForm.get('title')?.errors && addForm.get('title')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p *ngIf="addForm.get('title')?.getError('required')" class="m-0">
+                Title is required.
+              </p>
+            </div>
+            <label for="publicationDate">Publication Date</label>
+            <input
+              placeholder="Publication Date"
+              formControlName="publicationDate"
+              class="form-control mb-2"
+              type="date"
+              id="publicationDate"
+            />
+            <div
+              *ngIf="
+                addForm.get('publicationDate')?.errors &&
+                addForm.get('publicationDate')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p
+                *ngIf="addForm.get('publicationDate')?.getError('required')"
+                class="m-0"
+              >
+                Publication date is required.
+              </p>
+            </div>
+
+            <label for="image">Image</label>
+            <input
+              formControlName="image"
+              class="form-control mb-2"
+              type="file"
+              id="image"
+              (change)="uploadImage($event)"
+            />
+            <div
+              *ngIf="
+                addForm.get('image')?.errors && addForm.get('image')?.touched
+              "
+              class="alert alert-danger"
+            >
+              <p *ngIf="addForm.get('image')?.getError('required')" class="m-0">
+                Image is required.
+              </p>
+            </div>
+
+            <img
+              [src]="imagePreviewSrc"
+              class="w-100 img-fluid"
+              style="max-height: 196px; object-fit: cover"
+            />
+
+            <label for="authorId">Author Name</label>
+            <select
+              formControlName="authorId"
+              class="form-select mb-2"
+              id="authorId"
+            >
+              @for(author of authorsList; track author.id) {
+              <option value="{{ author.id }}">{{ author.name }}</option>
+              }
+            </select>
+
+            <label for="content">Content</label>
+            <quill-editor id="content" formControlName="content"></quill-editor>
+
+            <button
+              data-bs-dismiss="modal"
+              [disabled]="editForm.invalid"
+              class="btn btn-primary my-4 w-100"
+              type="submit"
+              data-bs-dismiss="modal"
+            >
+              Edit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var EditArticleModal = document.getElementById("EditArticleModal");
+
+  EditArticleModal.addEventListener("show.bs.modal", function (event) {
+    // Button that triggered the modal
+    let button = event.relatedTarget;
+    // Extract info from data-bs-* attributes
+    let recipient = button.getAttribute("data-bs-whatever");
+
+    // Use above variables to manipulate the DOM
+  });
+</script>

@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-lg bg-body fixed-top">
+  <div class="container-fluid">
+    <a routerLink="/home" class="text-decoration-none">
+      <img
+        src="assets/images/Logo.png"
+        alt="Logo"
+        width="128px"
+        class="img-fluid"
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="form-group has-search w-100 mx-lg-5 my-3 my-lg-0">
+        <span class="fa fa-search form-control-feedback">
+          <fa-icon [icon]="searchIcon" [fixedWidth]="true"></fa-icon>
+        </span>
+        <input
+          type="search"
+          class="form-control"
+          placeholder="Search"
+          (search)="search($event)"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+  <div class="row">
+    @for (article of paginatedArticles; track article.id) {
+    <div class="col-md-4 col-sm-6 my-3">
+      <a [routerLink]="['/article', article.id]" class="text-decoration-none">
+        <div class="card text-start border-0">
+          <img
+            class="card-img-top rounded shadow"
+            src="data:image/png;base64,{{ article.image }}"
+            style="max-height: 196px; object-fit: cover"
+            alt="article"
+          />
+          <div class="card-body">
+            <h4 class="card-title">{{ article.title }}</h4>
+            <div class="d-flex align-items-center">
+              <div>
+                <img
+                  class="rounded-circle"
+                  width="50px"
+                  height="50px"
+                  src="data:image/png;base64,{{
+                    articlesAuthors[article.authorId].image
+                  }}"
+                  alt=""
+                />
+              </div>
+              <div class="ps-2">
+                <h6>{{ articlesAuthors[article.authorId].name }}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    }
+  </div>
+  @if (showLoadMoreButton === 1) {
+  <div class="row justify-content-center my-5">
+    <button class="btn btn-primary w-50" (click)="loadMoreContent()">
+      Load more ...
+    </button>
+  </div>
+  } @if (showLoadMoreButton === 2) {
+  <div class="row justify-content-center my-5">
+    <button class="btn btn-primary w-50" disabled>
+      All articles have bean loaded
+    </button>
+  </div>
+  }
+</div>

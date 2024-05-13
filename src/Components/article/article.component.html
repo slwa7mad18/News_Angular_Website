@@ -1,0 +1,67 @@
+<app-header></app-header>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-10 mx-auto">
+      <div class="card text-start border-0">
+        <img
+          class="card-img-top rounded shadow"
+          src="data:image/png;base64,{{ article.image }}"
+          style="max-height: 512px; object-fit: cover"
+          alt="article"
+        />
+        <div class="card-body">
+          <div class="alert alert-primary" role="alert">
+            <h4 class="alert-heading">Try our new AI-Summarizer now!</h4>
+            <h6 class="alert-heading">powered by ChatGPT!</h6>
+            <p [innerHTML]="aiSummary"></p>
+
+            @if (showAiLoadingIcon == 0) {
+            <hr />
+            <button
+              class="btn btn-outline-primary"
+              (click)="SummarizeArticle(article.id)"
+            >
+              Summarize this article now!
+            </button>
+            } @if (showAiLoadingIcon == 1) {
+            <hr />
+            <button class="btn btn-outline-primary" disabled>
+              Summarize this article now!
+            </button>
+            <span class="ms-3">
+              <fa-icon
+                [icon]="aiLoadingIcon"
+                [fixedWidth]="true"
+                animation="spin"
+              ></fa-icon>
+              <span class="ms-1">Loading the article summary ...</span>
+            </span>
+            }
+          </div>
+
+          <h1 class="card-title">
+            {{ article.title }}
+          </h1>
+          <p [innerHTML]="article.content" class="card-text"></p>
+          <div class="d-flex align-items-center">
+            <div>
+              <img
+                class="rounded-circle"
+                width="50px"
+                height="50px"
+                src="data:image/png;base64,{{ author.image }}"
+                alt=""
+              />
+            </div>
+            <div class="ps-2">
+              <h6 class="m-0">{{ author.name }}</h6>
+              <p class="m-0">{{ author.bio }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

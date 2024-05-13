@@ -1,0 +1,83 @@
+<div class="text-bg-primary container-fluid vh-100 w-100">
+  <div class="row">
+    <div
+      class="d-none d-lg-flex col-lg-6 vh-100 flex-column align-items-center justify-content-center"
+    >
+      <h1>Welcome to Admin Panel</h1>
+      <h3>Edit your Website Content</h3>
+    </div>
+
+    <div
+      class="col-12 col-lg-5 text-bg-primary p-5 d-flex justify-content-center align-items-center"
+    >
+      <div class="shadow text-center w-100 rounded p-5 bg-body">
+        <h4 class="text-dark mb-5">Login</h4>
+        <form (ngSubmit)="handleLogin(loginForm)" [formGroup]="loginForm">
+          <input
+            placeholder="Email Address"
+            formControlName="email"
+            class="form-control my-3"
+            type="email"
+            id="email"
+            (input)="clearApiErrorMessage()"
+          />
+          <div
+            *ngIf="
+              loginForm.get('email')?.errors && loginForm.get('email')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p *ngIf="loginForm.get('email')?.getError('email')" class="m-0">
+              Invalid email format.
+            </p>
+            <p *ngIf="loginForm.get('email')?.getError('required')" class="m-0">
+              Email is required.
+            </p>
+          </div>
+          <input
+            placeholder="Password"
+            formControlName="password"
+            class="form-control mb-2"
+            type="password"
+            id="password"
+            (input)="clearApiErrorMessage()"
+          />
+          <!-- <div
+            *ngIf="
+              loginForm.get('password')?.errors &&
+              loginForm.get('password')?.touched
+            "
+            class="alert alert-danger"
+          >
+            <p
+              *ngIf="loginForm.get('password')?.getError('pattern')"
+              class="m-0"
+            >
+            Password must be at least eight characters, and contain at least one letter, one special character, and one number.
+            </p>
+            <p
+              *ngIf="loginForm.get('password')?.getError('required')"
+              class="m-0"
+            >
+              Password is required.
+            </p>
+          </div> -->
+
+          <div *ngIf="apiError" class="alert alert-danger">
+            {{ apiError }}
+          </div>
+          <button
+            [disabled]="loginForm.invalid"
+            class="btn btn-primary my-4 w-100"
+            type="submit"
+          >
+            Login
+          </button>
+          <!-- <a routerLink="/forgetPassword" class="text-decoration-none"
+            >Forget Password?</a
+          > -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

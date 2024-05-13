@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a routerLink="/home" class="text-decoration-none">
+      <img
+        src="assets/images/Logo.png"
+        alt="Logo"
+        width="128px"
+        class="img-fluid"
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a routerLink="/login" class="text-decoration-none me-2">
+            <button class="btn btn-light p-2">Login as Admin</button>
+          </a>
+        </li>
+        <li class="nav-item">
+          <button
+            class="rounded-circle btn btn-light p-2 me-2"
+            (click)="search()"
+          >
+            <fa-icon
+              [icon]="searchIcon"
+              [fixedWidth]="true"
+              size="lg"
+            ></fa-icon>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="rounded-circle btn btn-light p-2" (click)="DarkMode()">
+            <fa-icon [icon]="modeIcon" [fixedWidth]="true" size="lg"></fa-icon>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,32 @@
+@import "../node_modules/quill/dist/quill.snow.css";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  font-family: "Rubik", sans-serif;
+  /* font-optical-sizing: auto; */
+}
+
+th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+table {
+  text-align: center;
+}
+
+td {
+  vertical-align: middle;
+}
+
+label {
+  font-weight: bold;
+}
+
+.ngx-pagination {
+  display: flex !important;
+  justify-content: center !important;
+}

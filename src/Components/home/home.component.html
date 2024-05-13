@@ -1,0 +1,180 @@
+<app-header></app-header>
+
+<div class="container my-5">
+  <div class="row">
+    @if (homeArticles.length > 0) {
+    <div class="col-lg-8 pe-md-4 mb-4 mb-md-0">
+      <a
+        [routerLink]="['/article', homeArticles[0].id]"
+        class="text-decoration-none"
+      >
+        <div class="card text-start border-0">
+          <img
+            class="card-img-top rounded shadow"
+            src="data:image/png;base64,{{ homeArticles[0].image }}"
+            style="max-height: 512px; object-fit: cover"
+            alt="news logo"
+          />
+          <div class="card-body">
+            <h4 class="card-title">
+              {{ homeArticles[0].title }}
+            </h4>
+            <div class="d-flex align-items-center">
+              <div>
+                <img
+                  class="rounded-circle"
+                  width="50px"
+                  height="50px"
+                  src="data:image/png;base64,{{
+                    articlesAuthors[homeArticles[0].authorId].image
+                  }}"
+                  alt=""
+                />
+              </div>
+              <div class="ps-2">
+                <h6>{{ articlesAuthors[homeArticles[0].authorId].name }}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    }
+    <div class="col-lg-4">
+      <div class="row">
+        @if (homeArticles.length > 1) {
+        <div class="col-md-6 col-lg-12 mb-4">
+          <a
+            [routerLink]="['/article', homeArticles[1].id]"
+            class="text-decoration-none"
+          >
+            <div class="card text-start border-0">
+              <img
+                class="card-img-top rounded shadow"
+                src="data:image/png;base64,{{ homeArticles[1].image }}"
+                style="max-height: 196px; object-fit: cover"
+                alt="article"
+              />
+              <div class="card-body">
+                <h4 class="card-title">
+                  {{ homeArticles[1].title }}
+                </h4>
+                <div class="d-flex align-items-center">
+                  <div>
+                    <img
+                      class="rounded-circle"
+                      width="50px"
+                      height="50px"
+                      src="data:image/png;base64,{{
+                        articlesAuthors[homeArticles[1].authorId].image
+                      }}"
+                      alt=""
+                    />
+                  </div>
+                  <div class="ps-2">
+                    <h6>
+                      {{ articlesAuthors[homeArticles[1].authorId].name }}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        } @if (homeArticles.length > 2) {
+        <div class="col-md-6 col-lg-12">
+          <a
+            [routerLink]="['/article', homeArticles[2].id]"
+            class="text-decoration-none"
+          >
+            <div class="card text-start border-0">
+              <img
+                class="card-img-top rounded shadow"
+                src="data:image/png;base64,{{ homeArticles[2].image }}"
+                style="max-height: 196px; object-fit: cover"
+                alt="article"
+              />
+              <div class="card-body">
+                <h4 class="card-title">
+                  {{ homeArticles[2].title }}
+                </h4>
+                <div class="d-flex align-items-center">
+                  <div>
+                    <img
+                      class="rounded-circle"
+                      width="50px"
+                      height="50px"
+                      src="data:image/png;base64,{{
+                        articlesAuthors[homeArticles[2].authorId].image
+                      }}"
+                      alt=""
+                    />
+                  </div>
+                  <div class="ps-2">
+                    <h6>
+                      {{ articlesAuthors[homeArticles[2].authorId].name }}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    @for (article of paginatedArticles; track article.id) {
+    <div class="col-md-4 col-sm-6 my-3">
+      <a [routerLink]="['/article', article.id]" class="text-decoration-none">
+        <div class="card text-start border-0">
+          <img
+            class="card-img-top rounded shadow"
+            src="data:image/png;base64,{{ article.image }}"
+            style="max-height: 196px; object-fit: cover"
+            alt="article"
+          />
+          <div class="card-body">
+            <h4 class="card-title">{{ article.title }}</h4>
+            <div class="d-flex align-items-center">
+              <div>
+                <img
+                  class="rounded-circle"
+                  width="50px"
+                  height="50px"
+                  src="data:image/png;base64,{{
+                    articlesAuthors[article.authorId].image
+                  }}"
+                  alt=""
+                />
+              </div>
+              <div class="ps-2">
+                <h6>{{ articlesAuthors[article.authorId].name }}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    }
+  </div>
+  @if (showLoadMoreButton === 1) {
+  <div class="row justify-content-center mt-5">
+    <button class="btn btn-primary w-50" (click)="loadMoreContent()">
+      Load more ...
+    </button>
+  </div>
+  } @if (showLoadMoreButton === 2) {
+  <div class="row justify-content-center mt-5">
+    <button class="btn btn-primary w-50" disabled>
+      All articles have bean loaded
+    </button>
+  </div>
+  }
+</div>
+
+<app-footer></app-footer>
